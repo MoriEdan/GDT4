@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     {
         if (unit == "Soldier")
         {
+            //Soldier cost: 50 food, 0 gold, 1 unit
             if(resources.subtractUnitCost(50, 0, 1))
             {
                 Instantiate(Soldier, new Vector3(0, 1, 0), new Quaternion());
@@ -47,7 +48,8 @@ public class PlayerController : MonoBehaviour
         }
         else if (unit == "Farm")
         {
-            if (resources.subtractUnitCost(0, 100, 0))
+            //Farm cost: 0 Food, 100 Gold, 1 Unit
+            if (resources.subtractUnitCost(0, 100, 1))
             {
                 Instantiate(Farm, new Vector3(1, 1, 1), new Quaternion());
                 farmCount++;
