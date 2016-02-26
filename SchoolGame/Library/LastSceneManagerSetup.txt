@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/SchoolGame.unity
+- path: Assets/Scenes/SchoolGame.unity
   isLoaded: 1
   isActive: 1

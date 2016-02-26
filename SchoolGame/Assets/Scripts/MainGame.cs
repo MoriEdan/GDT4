@@ -12,7 +12,7 @@ public class MainGame : MonoBehaviour
 
     private List<GameObject> Players;
     private int maxNumPlayers;
-    private int playerTurn;
+    private int turn;
 
 	// Use this for initialization
 	void Start ()
@@ -24,29 +24,37 @@ public class MainGame : MonoBehaviour
 
         //Make a random player start the game
         maxNumPlayers = 2;
-        playerTurn = Random.Range(1, maxNumPlayers);
+        turn = Random.Range(1, maxNumPlayers);
         getPlayerControlerCurrentTurn().giveTurn();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-	    
+        PlayerTurn.text = "Player " + turn + " turn!";
 	}
 
     public void nextTurn()
     {
         getPlayerControlerCurrentTurn().endTurn();
-        playerTurn++;
-        if(playerTurn > maxNumPlayers)
+        turn++;
+        if(turn > maxNumPlayers)
         {
-            playerTurn = 1;
+            turn = 1;
         }
         getPlayerControlerCurrentTurn().giveTurn();
     }
 
+    public void buyUnit(string unit)
+    {
+        if(getPlayerControlerCurrentTurn().buyUnit(unit))
+        {
+            nextTurn();
+        }
+    }
+
     private PlayerController getPlayerControlerCurrentTurn()
     {
-        return Players[playerTurn - 1].GetComponent<PlayerController>();
+        return Players[turn - 1].GetComponent<PlayerController>();
     }
 }

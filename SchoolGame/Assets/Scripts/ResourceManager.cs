@@ -22,14 +22,42 @@ public class ResourceManager : MonoBehaviour
         unitCount = 0;
         unitCap = 5;
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    public int getFoodCount()
     {
-        updateResources();
+        return foodCount;
     }
 
-    private void updateResources()
+    public int getGoldCount()
+    {
+        return goldCount;
+    }
+
+    public int getUnitCount()
+    {
+        return unitCount;
+    }
+
+    public bool subtractUnitCost(int foodCost, int goldCost, int unitCost)
+    {
+        if (foodCost <= foodCount && goldCost <= goldCount && unitCount + unitCost <= unitCap)
+        {
+            foodCount -= foodCost;
+            goldCount -= goldCost;
+            unitCount += unitCost;
+
+            return true;
+        }
+        return false;
+    }
+
+    public void processIncome(int numOfFarms, int numOfMines)
+    {
+        foodCount += (20 * numOfFarms);
+        goldCount += (50 * numOfMines);
+    }
+
+    public void updateResources()
     {
         Text[] Resources = ResourceContainer.GetComponentsInChildren<Text>();
 
