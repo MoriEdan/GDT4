@@ -21,4 +21,14 @@ public class TileManager : MonoBehaviour {
             //do something
         }
     }
+
+    public void selectTile()
+    {
+        selected = true;
+    }
+
+    public void deselectTile()
+    {
+        selected = false;
+    }
 }

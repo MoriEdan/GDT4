@@ -10,6 +10,8 @@ public class GameField : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        Debug.Log("start");
+
         GameGrid = new GameObject[20, 20];
 
         for (int xOffset = 0; xOffset < 20; xOffset++)
@@ -23,11 +25,13 @@ public class GameField : MonoBehaviour
                 GameGrid[xOffset, yOffset] = (GameObject)Instantiate(GameTile, new Vector3(x, y, z), new Quaternion());
             }
         }
+
+        Debug.Log("done");
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-	
+        Debug.Log("test");
 	}
 }
