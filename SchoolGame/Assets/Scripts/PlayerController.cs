@@ -34,25 +34,34 @@ public class PlayerController : MonoBehaviour
         }
 	}
 
-    public bool buyUnit(string unit)
+    public bool buyUnit(string unit, GameObject selectedGameTile)
     {
+        //Debug.Log("buying");
         if (unit == "Soldier")
         {
-            //Soldier cost: 50 food, 0 gold, 1 unit
+            //Debug.Log("Soldier");
+            //Soldier cost: 50 food, 0 gold, 1 unit (1)
             if(resources.subtractUnitCost(50, 0, 1))
             {
-                Instantiate(Soldier, new Vector3(0, 1, 0), new Quaternion());
+                //Debug.Log("start placing");
+                Instantiate(Soldier, selectedGameTile.transform.position + new Vector3(0, 2f, 0), new Quaternion());
                 SoldierCount++;
+                selectedGameTile.GetComponent<TileManager>().setOccupied(1);
+                //Debug.Log("Done");
                 return true;
             }
         }
         else if (unit == "Farm")
         {
-            //Farm cost: 0 Food, 100 Gold, 1 Unit
+            //Debug.Log("Farm");
+            //Farm cost: 0 Food, 100 Gold, 1 Unit (2)
             if (resources.subtractUnitCost(0, 100, 1))
             {
-                Instantiate(Farm, new Vector3(1, 1, 1), new Quaternion());
+                //Debug.Log("start placing")
+                Instantiate(Farm, selectedGameTile.transform.position + new Vector3(0, 2f, 0), new Quaternion());
                 farmCount++;
+                selectedGameTile.GetComponent<TileManager>().setOccupied(2);
+                //Debug.Log("Done");
                 return true;
             }
         }

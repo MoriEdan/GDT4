@@ -6,6 +6,7 @@ public class GameField : MonoBehaviour
     public GameObject GameTile;
 
     private GameObject[,] GameGrid;
+    private GameObject selectedGameTile;
 
 	// Use this for initialization
 	void Start ()
@@ -28,10 +29,37 @@ public class GameField : MonoBehaviour
 
         Debug.Log("done");
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-        Debug.Log("test");
-	}
+        for (int i = 0; i < 20; i++)
+        {
+            for (int j = 0; j < 20; j++)
+            {
+                if (GameGrid[i, j].GetComponent<TileManager>().getSelected())
+                {
+                    selectedGameTile = GameGrid[i, j];
+                }
+            }
+        }
+    }
+
+    public GameObject getSelectedGameTile()
+    {
+        return selectedGameTile;
+    }
+   
+
+    public void deselectAll()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            for (int j = 0; j < 20; j++)
+            {
+                GameGrid[i, j].GetComponent<TileManager>().deselectTile();
+                selectedGameTile = null;
+            }
+        }
+    }
 }

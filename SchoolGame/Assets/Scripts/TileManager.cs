@@ -18,8 +18,31 @@ public class TileManager : MonoBehaviour {
     {
         if (selected)
         {
-            //do something
+            Renderer rend = GetComponent<Renderer>();
+            rend.material.shader = Shader.Find("Specular");
+            rend.material.SetColor("_Color", Color.green);
         }
+        else
+        {
+            Renderer rend = GetComponent<Renderer>();
+            rend.material.shader = Shader.Find("Specular");
+            rend.material.SetColor("_Color", Color.red);
+        }
+    }
+
+    public int getOccupied()
+    {
+        return occupied;
+    }
+
+    public void setOccupied(int o)
+    {
+        occupied = o;
+    }
+
+    public bool getSelected()
+    {
+        return selected;
     }
 
     public void selectTile()

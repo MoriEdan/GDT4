@@ -4,6 +4,7 @@ using System.Collections;
 public class CameraControl : MonoBehaviour {
 
     public float speed;
+    public Light GameLight;
 
 	// Use this for initialization
 	void Start () {
@@ -33,5 +34,7 @@ public class CameraControl : MonoBehaviour {
             transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
             //transform.Translate(new Vector3(0, 0, speed * Time.deltaTime));
         }
+
+        GameLight.transform.position = this.transform.position;
     }
 }
