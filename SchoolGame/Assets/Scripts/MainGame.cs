@@ -7,6 +7,7 @@ public class MainGame : MonoBehaviour
 {
     public GameObject Player1;
     public GameObject Player2;
+    public GameField GameField;
 
     public Text PlayerTurn;
 
