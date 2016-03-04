@@ -5,6 +5,7 @@ public class TileManager : MonoBehaviour {
 
     private bool selected;
     private int occupied;
+    private bool[] usableByPlayer = new bool[] { false, false, false, false };
 
     // Use this for initialization
     void Start()
@@ -22,11 +23,33 @@ public class TileManager : MonoBehaviour {
             rend.material.shader = Shader.Find("Specular");
             rend.material.SetColor("_Color", Color.green);
         }
+        else if (!selected && usableByPlayer[0] || usableByPlayer[1] || usableByPlayer[2] || usableByPlayer[3])
+        {
+            Renderer rend = GetComponent<Renderer>();
+            rend.material.shader = Shader.Find("Specular");
+
+            if (usableByPlayer[0])
+            {
+                rend.material.SetColor("_Color", Color.blue);
+            }
+            else if(usableByPlayer[1])
+            {
+                rend.material.SetColor("_Color", Color.yellow);
+            }
+            else if(usableByPlayer[2])
+            {
+                rend.material.SetColor("_Color", Color.magenta);
+            }
+            else if(usableByPlayer[3])
+            {
+                rend.material.SetColor("_Color", Color.red);
+            }            
+        }
         else
         {
             Renderer rend = GetComponent<Renderer>();
             rend.material.shader = Shader.Find("Specular");
-            rend.material.SetColor("_Color", Color.red);
+            rend.material.SetColor("_Color", Color.white);
         }
     }
 
@@ -53,5 +76,15 @@ public class TileManager : MonoBehaviour {
     public void deselectTile()
     {
         selected = false;
+    }
+
+    public bool getUsabiltyForPlayer(int player)
+    {
+        return usableByPlayer[player - 1];
+    }
+
+    public void setUsabilityForPlayer(int player, bool use)
+    {
+        usableByPlayer[player - 1] = use;
     }
 }

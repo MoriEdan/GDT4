@@ -5,13 +5,12 @@ using System.Collections.Generic;
 
 public class ResourceManager : MonoBehaviour
 {
+    public GameObject ResourceContainer;
+
     private int foodCount;
     private int goldCount;
     private int unitCount;
     private int unitCap;
-
-    public GameObject ResourceContainer;
-
 
 	// Use this for initialization
 	void Start ()

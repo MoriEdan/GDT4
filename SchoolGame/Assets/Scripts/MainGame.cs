@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 public class MainGame : MonoBehaviour
 {
-    public GameObject Player1;
-    public GameObject Player2;
+    public GameObject PlayerContainer;
+
     public GameField GameField;
 
     public Text PlayerTurn;
@@ -18,13 +18,17 @@ public class MainGame : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        //Add players to the list of available players
         Players = new List<GameObject>();
-        Players.Add(Player1);
-        Players.Add(Player2);
+
+        //Add players to the list of available players
+        for (int i = 0; i < PlayerContainer.transform.childCount; i++)
+        {
+            Debug.Log(i);
+            Players.Add(PlayerContainer.transform.GetChild(i).gameObject);
+        }
 
         //Make a random player start the game
-        maxNumPlayers = 2;
+        maxNumPlayers = 4;
         turn = Random.Range(1, maxNumPlayers);
         getPlayerControlerCurrentTurn().giveTurn();
 	}
