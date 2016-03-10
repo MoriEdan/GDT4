@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/GD3D canvas.unity
+  isLoaded: 1
+  isActive: 1

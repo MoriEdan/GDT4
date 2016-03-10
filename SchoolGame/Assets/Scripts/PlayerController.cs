@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,16 +14,21 @@ public class PlayerController : MonoBehaviour
     private int SoldierCount;
     private int farmCount;
     private int mineCount;
+    private int houseCount;
+
+    private List<GameObject> Units;
 
 	// Use this for initialization
 	void Start ()
     {
         hasTurn = false;
         resources = GetComponent<ResourceManager>();
+        Units = new List<GameObject>();
 
         SoldierCount = 0;
         farmCount = 0;
         mineCount = 0;
+        houseCount = 0;
 	}
 	
 	// Update is called once per frame
@@ -44,7 +50,7 @@ public class PlayerController : MonoBehaviour
             if(resources.subtractUnitCost(50, 0, 1))
             {
                 //Debug.Log("start placing");
-                Instantiate(Soldier, selectedGameTile.transform.position + new Vector3(0, 2f, 0), new Quaternion());
+                Units.Add((GameObject)Instantiate(Soldier, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion()));
                 SoldierCount++;
                 selectedGameTile.GetComponent<TileManager>().setOccupied(1);
                 //Debug.Log("Done");
@@ -58,7 +64,7 @@ public class PlayerController : MonoBehaviour
             if (resources.subtractUnitCost(0, 100, 1))
             {
                 //Debug.Log("start placing")
-                Instantiate(Farm, selectedGameTile.transform.position + new Vector3(0, 2f, 0), new Quaternion());
+                Units.Add((GameObject)Instantiate(Farm, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion()));
                 farmCount++;
                 selectedGameTile.GetComponent<TileManager>().setOccupied(2);
                 //Debug.Log("Done");
@@ -81,5 +87,13 @@ public class PlayerController : MonoBehaviour
     {
         //bla bla end turn
         hasTurn = false;
+    }
+
+    public void deselectAll()
+    {
+        foreach (GameObject o in Units)
+        {
+            o.GetComponent<UnitController>().deselectUnit();
+        }
     }
 }

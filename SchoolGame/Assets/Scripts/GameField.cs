@@ -24,9 +24,10 @@ public class GameField : MonoBehaviour
                 float z = -19 + 2 * yOffset;
 
                 GameGrid[xOffset, yOffset] = (GameObject)Instantiate(GameTile, new Vector3(x, y, z), new Quaternion());
+                GameGrid[xOffset, yOffset].transform.SetParent(this.transform);
 
                 //assign tiles to player 1
-                if(xOffset >= 0 && xOffset <=4 && yOffset >= 0 && yOffset <= 4)
+                if (xOffset >= 0 && xOffset <=4 && yOffset >= 0 && yOffset <= 4)
                 {
                     GameGrid[xOffset, yOffset].GetComponent<TileManager>().setUsabilityForPlayer(1, true);
                 }

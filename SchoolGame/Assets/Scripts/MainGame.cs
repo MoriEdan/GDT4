@@ -30,6 +30,7 @@ public class MainGame : MonoBehaviour
         //Make a random player start the game
         maxNumPlayers = 4;
         turn = Random.Range(1, maxNumPlayers);
+        setCameraPositionForPlayer(turn);
         getPlayerControlerCurrentTurn().giveTurn();
 	}
 	
@@ -51,14 +52,20 @@ public class MainGame : MonoBehaviour
 
                     if (hit.transform.tag == "GameTile")
                     {
-                        GameField.deselectAll();
+                        deselectAllItems();
                         hit.collider.gameObject.GetComponent<TileManager>().selectTile();
+                    }
+                    else if(hit.transform.tag == "Unit")
+                    {
+                        deselectAllItems();
+                        hit.collider.gameObject.GetComponent<UnitController>().selectUnit();
                     }
                 }
             }     
         }
     }
 
+    //handling buttons for buying units
     public void buyUnitButton(string unit)
     {
         GameObject selectedGameTile = GameField.getSelectedGameTile();
@@ -66,17 +73,19 @@ public class MainGame : MonoBehaviour
         if (selectedGameTile != null)
         {
             //Debug.Log(selectedGameTile.GetComponent<TileManager>().getOccupied());
-            if (selectedGameTile.GetComponent<TileManager>().getOccupied() == 0)
+            //Debug.Log(selectedGameTile.GetComponent<TileManager>().getUsabiltyForPlayer(turn));
+            if (selectedGameTile.GetComponent<TileManager>().getOccupied() == 0 
+                && selectedGameTile.GetComponent<TileManager>().getUsabiltyForPlayer(turn))
             { 
                 if (getPlayerControlerCurrentTurn().buyUnit(unit, selectedGameTile))
                 {
-                    nextTurn();
+                    //nextTurn();
                 }
             }
-            
         }
     }
 
+    //handle the end turn button
     public void endTurnButton()
     {
         nextTurn();
@@ -92,11 +101,42 @@ public class MainGame : MonoBehaviour
         {
             turn = 1;
         }
+        setCameraPositionForPlayer(turn);
         getPlayerControlerCurrentTurn().giveTurn();
     }
 
     private PlayerController getPlayerControlerCurrentTurn()
     {
         return Players[turn - 1].GetComponent<PlayerController>();
+    }
+
+    private void deselectAllItems()
+    {
+        GameField.deselectAll();
+        foreach (GameObject o in Players)
+        {
+            o.GetComponent<PlayerController>().deselectAll();
+        }
+    }
+
+    private void setCameraPositionForPlayer(int player)
+    {
+        switch (player)
+        {
+            case 1: //camera position player 1
+                CameraControl.instance.transform.position = new Vector3(-21, 5, -15);
+                break;
+            case 2: //camera position player 2
+                CameraControl.instance.transform.position = new Vector3(8, 5, -15);
+                break;
+            case 3: //camera position player 3
+                CameraControl.instance.transform.position = new Vector3(-21, 5, 15);
+                break;
+            case 4: //camera position player 4
+                CameraControl.instance.transform.position = new Vector3(8, 5, 15);
+                break;
+            default:
+                break;
+        }
     }
 }

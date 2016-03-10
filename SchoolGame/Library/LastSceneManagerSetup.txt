@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/SchoolGame.unity
+- path: C:/Users/Tim/AppData/Local/Temp/Temp1_RTSStyleUnitSelection.zip/Assets/Scene.unity
   isLoaded: 1
   isActive: 1

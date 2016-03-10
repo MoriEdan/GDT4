@@ -3,12 +3,15 @@ using System.Collections;
 
 public class CameraControl : MonoBehaviour {
 
+    public static CameraControl instance;
+
     public float speed;
     public Light GameLight;
 
 	// Use this for initialization
-	void Start () {
-	
+	void Awake ()
+    {
+        instance = this;
 	}
 
     // Update is called once per frame
