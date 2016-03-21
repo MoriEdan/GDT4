@@ -12,43 +12,47 @@ public class GameField : MonoBehaviour
 	void Start ()
     {
         Debug.Log("start");
+        int gridSizeX = GameSettings.Values.gridSizeX;
+        int gridSizeZ = GameSettings.Values.gridSizeZ;
+        int playerAreaX = GameSettings.Values.playerAreaX;
+        int playerAreaZ = GameSettings.Values.PlayerAreaZ;
 
-        GameGrid = new GameObject[20, 20];
+        GameGrid = new GameObject[gridSizeX, gridSizeZ];
 
-        for (int xOffset = 0; xOffset < 20; xOffset++)
+        for (int xOffset = 0; xOffset < gridSizeX; xOffset++)
         {
-            for (int yOffset = 0; yOffset < 20; yOffset++)
+            for (int zOffset = 0; zOffset < gridSizeZ; zOffset++)
             {
-                float x = -19 + 2 * xOffset;
+                float x = -(gridSizeX - 1) + 2 * xOffset;
                 float y = 0.2F;
-                float z = -19 + 2 * yOffset;
+                float z = -(gridSizeZ - 1) + 2 * zOffset;
 
-                GameGrid[xOffset, yOffset] = (GameObject)Instantiate(GameTile, new Vector3(x, y, z), new Quaternion());
-                GameGrid[xOffset, yOffset].transform.SetParent(this.transform);
+                GameObject newTile = (GameObject)Instantiate(GameTile, new Vector3(x, y, z), new Quaternion());
+                newTile.transform.SetParent(this.transform);
+                newTile.name = "GameTile[" + xOffset + "," + zOffset + "]";
 
                 //assign tiles to player 1
-                if (xOffset >= 0 && xOffset <=4 && yOffset >= 0 && yOffset <= 4)
+                if (xOffset >= 0 && xOffset <= (playerAreaX - 1) && zOffset >= 0 && zOffset <= (playerAreaZ - 1))
                 {
-                    GameGrid[xOffset, yOffset].GetComponent<TileManager>().setUsabilityForPlayer(1, true);
+                    newTile.GetComponent<TileManager>().setUsabilityForPlayer(1, true);
                 }
-
                 //assign tiles to player 2
-                if (xOffset >= 15 && xOffset <= 19 && yOffset >= 0 && yOffset <= 4)
+                else if (xOffset >= (gridSizeX - playerAreaX) && xOffset <= (gridSizeX - 1) && zOffset >= 0 && zOffset <= (playerAreaZ - 1))
                 {
-                    GameGrid[xOffset, yOffset].GetComponent<TileManager>().setUsabilityForPlayer(2, true);
+                    newTile.GetComponent<TileManager>().setUsabilityForPlayer(2, true);
                 }
-
                 //assign tiles to player 3
-                if (xOffset >= 0 && xOffset <= 4 && yOffset >= 15 && yOffset <= 19)
+                else if (GameSettings.Values.numberOfPlayers >= 3 &&  xOffset >= 0 && xOffset <= (playerAreaX - 1) && zOffset >= (gridSizeZ - playerAreaZ) && zOffset <= (gridSizeZ - 1))
                 {
-                    GameGrid[xOffset, yOffset].GetComponent<TileManager>().setUsabilityForPlayer(3, true);
+                    newTile.GetComponent<TileManager>().setUsabilityForPlayer(3, true);
+                }
+                //assign tiles to player 4
+                else if (GameSettings.Values.numberOfPlayers >= 4 && xOffset >= (gridSizeX - playerAreaX) && xOffset <= (gridSizeX - 1) && zOffset >= (gridSizeZ - playerAreaZ) && zOffset <= (gridSizeZ - 1))
+                {
+                    newTile.GetComponent<TileManager>().setUsabilityForPlayer(4, true);
                 }
 
-                //assign tiles to player 4
-                if (xOffset >= 15 && xOffset <= 19 && yOffset >= 15 && yOffset <= 19)
-                {
-                    GameGrid[xOffset, yOffset].GetComponent<TileManager>().setUsabilityForPlayer(4, true);
-                }
+                GameGrid[xOffset, zOffset] = newTile;
             }
         }
 
@@ -58,13 +62,13 @@ public class GameField : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < 20; i++)
+        for (int x = 0; x < GameSettings.Values.gridSizeX; x++)
         {
-            for (int j = 0; j < 20; j++)
+            for (int z = 0; z < GameSettings.Values.gridSizeZ; z++)
             {
-                if (GameGrid[i, j].GetComponent<TileManager>().getSelected())
+                if (GameGrid[x, z].GetComponent<TileManager>().getSelected())
                 {
-                    selectedGameTile = GameGrid[i, j];
+                    selectedGameTile = GameGrid[x, z];
                 }
             }
         }
@@ -78,11 +82,11 @@ public class GameField : MonoBehaviour
 
     public void deselectAll()
     {
-        for (int i = 0; i < 20; i++)
+        for (int x = 0; x < GameSettings.Values.gridSizeX; x++)
         {
-            for (int j = 0; j < 20; j++)
+            for (int z = 0; z < GameSettings.Values.gridSizeZ; z++)
             {
-                GameGrid[i, j].GetComponent<TileManager>().deselectTile();
+                GameGrid[x, z].GetComponent<TileManager>().deselectTile();
                 selectedGameTile = null;
             }
         }

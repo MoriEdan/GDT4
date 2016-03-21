@@ -5,19 +5,19 @@ using System.Collections.Generic;
 
 public class MainGame : MonoBehaviour
 {
-    public GameObject PlayerContainer;
+    public static MainGame instance;
 
+    public GameObject PlayerContainer;
     public GameField GameField;
 
-    public Text PlayerTurn;
-
     private List<GameObject> Players;
-    private int maxNumPlayers;
     private int turn;
 
 	// Use this for initialization
 	void Start ()
     {
+        instance = this;
+
         Players = new List<GameObject>();
 
         //Add players to the list of available players
@@ -28,16 +28,15 @@ public class MainGame : MonoBehaviour
         }
 
         //Make a random player start the game
-        maxNumPlayers = 4;
-        turn = Random.Range(1, maxNumPlayers);
-        setCameraPositionForPlayer(turn);
-        getPlayerControlerCurrentTurn().giveTurn();
+        turn = Random.Range(1, GameSettings.Values.numberOfPlayers);
+        CameraControl.instance.setCameraPositionForPlayer(turn);
+        getPlayerControlerCurrentTurn().giveTurn();  
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        PlayerTurn.text = "Player " + turn + " turn!";
+        GUIManager.instance.setPlayerTurnGUI(turn);
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -54,11 +53,17 @@ public class MainGame : MonoBehaviour
                     {
                         deselectAllItems();
                         hit.collider.gameObject.GetComponent<TileManager>().selectTile();
+                        GUIManager.instance.showUnitButtons(false);
                     }
                     else if(hit.transform.tag == "Unit")
                     {
                         deselectAllItems();
                         hit.collider.gameObject.GetComponent<UnitController>().selectUnit();
+
+                        if (hit.collider.gameObject.GetComponent<UnitController>().belongsToPlayer(turn))
+                        {        
+                            GUIManager.instance.showUnitButtons(true);
+                        }  
                     }
                 }
             }     
@@ -66,7 +71,7 @@ public class MainGame : MonoBehaviour
     }
 
     //handling buttons for buying units
-    public void buyUnitButton(string unit)
+    public void buyUnitFromButton(string unit)
     {
         GameObject selectedGameTile = GameField.getSelectedGameTile();
         //Debug.Log(selectedGameTile);
@@ -74,10 +79,10 @@ public class MainGame : MonoBehaviour
         {
             //Debug.Log(selectedGameTile.GetComponent<TileManager>().getOccupied());
             //Debug.Log(selectedGameTile.GetComponent<TileManager>().getUsabiltyForPlayer(turn));
-            if (selectedGameTile.GetComponent<TileManager>().getOccupied() == 0 
+            if (!selectedGameTile.GetComponent<TileManager>().getOccupied()
                 && selectedGameTile.GetComponent<TileManager>().getUsabiltyForPlayer(turn))
             { 
-                if (getPlayerControlerCurrentTurn().buyUnit(unit, selectedGameTile))
+                if (getPlayerControlerCurrentTurn().buyUnit(unit, selectedGameTile, turn))
                 {
                     //nextTurn();
                 }
@@ -85,23 +90,17 @@ public class MainGame : MonoBehaviour
         }
     }
 
-    //handle the end turn button
-    public void endTurnButton()
-    {
-        nextTurn();
-    }
-
-    private void nextTurn()
+    public void nextTurn()
     {
         GameField.deselectAll();
 
         getPlayerControlerCurrentTurn().endTurn();
         turn++;
-        if (turn > maxNumPlayers)
+        if (turn > GameSettings.Values.numberOfPlayers)
         {
             turn = 1;
         }
-        setCameraPositionForPlayer(turn);
+        CameraControl.instance.setCameraPositionForPlayer(turn);
         getPlayerControlerCurrentTurn().giveTurn();
     }
 
@@ -116,27 +115,6 @@ public class MainGame : MonoBehaviour
         foreach (GameObject o in Players)
         {
             o.GetComponent<PlayerController>().deselectAll();
-        }
-    }
-
-    private void setCameraPositionForPlayer(int player)
-    {
-        switch (player)
-        {
-            case 1: //camera position player 1
-                CameraControl.instance.transform.position = new Vector3(-21, 5, -15);
-                break;
-            case 2: //camera position player 2
-                CameraControl.instance.transform.position = new Vector3(8, 5, -15);
-                break;
-            case 3: //camera position player 3
-                CameraControl.instance.transform.position = new Vector3(-21, 5, 15);
-                break;
-            case 4: //camera position player 4
-                CameraControl.instance.transform.position = new Vector3(8, 5, 15);
-                break;
-            default:
-                break;
         }
     }
 }

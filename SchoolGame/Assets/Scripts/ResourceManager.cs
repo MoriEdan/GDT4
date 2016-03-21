@@ -5,8 +5,6 @@ using System.Collections.Generic;
 
 public class ResourceManager : MonoBehaviour
 {
-    public GameObject ResourceContainer;
-
     private int foodCount;
     private int goldCount;
     private int unitCount;
@@ -16,10 +14,10 @@ public class ResourceManager : MonoBehaviour
 	void Start ()
     {
         //init resources
-        foodCount = 100;
-        goldCount = 100;
-        unitCount = 0;
-        unitCap = 5;
+        foodCount = GameSettings.Values.startFood;
+        goldCount = GameSettings.Values.startGold;
+        unitCount = GameSettings.Values.startUnitCount;
+        unitCap = GameSettings.Values.startUnitCount;
 	}
 
     public int getFoodCount()
@@ -50,18 +48,15 @@ public class ResourceManager : MonoBehaviour
         return false;
     }
 
-    public void processIncome(int numOfFarms, int numOfMines)
+    public void processIncome(int numOfFarms, int numOfMines, int houseCount)
     {
-        foodCount += (20 * numOfFarms);
-        goldCount += (50 * numOfMines);
+        foodCount += (GameSettings.Values.FoodPerFarm * numOfFarms);
+        goldCount += (GameSettings.Values.GoldPerMine * numOfMines);
+        unitCap = GameSettings.Values.startUnitCap + GameSettings.Values.UnitsPerHouse * houseCount;
     }
 
-    public void updateResources()
+    public void updateResourcesOnGUI()
     {
-        Text[] Resources = ResourceContainer.GetComponentsInChildren<Text>();
-
-        Resources[0].text = "Food: " + foodCount;
-        Resources[1].text = "Gold: " + goldCount;
-        Resources[2].text = "Units: " + unitCount + "/" + unitCap;
+        GUIManager.instance.updateResourcesGUI(foodCount, goldCount, unitCount, unitCap);
     }
 }

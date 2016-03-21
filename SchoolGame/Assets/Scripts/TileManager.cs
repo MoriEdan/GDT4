@@ -4,13 +4,13 @@ using System.Collections;
 public class TileManager : MonoBehaviour {
 
     private bool selected;
-    private int occupied;
+    private bool occupied;
     private bool[] usableByPlayer = new bool[] { false, false, false, false };
 
     // Use this for initialization
     void Start()
     {
-        occupied = 0;   //0 means tile is free
+        occupied = false;
         selected = false;
     }
 
@@ -53,12 +53,12 @@ public class TileManager : MonoBehaviour {
         }
     }
 
-    public int getOccupied()
+    public bool getOccupied()
     {
         return occupied;
     }
 
-    public void setOccupied(int o)
+    public void setOccupied(bool o)
     {
         occupied = o;
     }
@@ -83,8 +83,8 @@ public class TileManager : MonoBehaviour {
         return usableByPlayer[player - 1];
     }
 
-    public void setUsabilityForPlayer(int player, bool use)
+    public void setUsabilityForPlayer(int player, bool usable)
     {
-        usableByPlayer[player - 1] = use;
+        usableByPlayer[player - 1] = usable;
     }
 }

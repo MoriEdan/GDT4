@@ -7,28 +7,20 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody Soldier;
     public Rigidbody Farm;
+    public Rigidbody Mine;
+    public Rigidbody House;
 
     private bool hasTurn;
     private ResourceManager resources;
 
-    private int SoldierCount;
-    private int farmCount;
-    private int mineCount;
-    private int houseCount;
-
-    private List<GameObject> Units;
+    private List<Rigidbody> Units;
 
 	// Use this for initialization
 	void Start ()
     {
         hasTurn = false;
         resources = GetComponent<ResourceManager>();
-        Units = new List<GameObject>();
-
-        SoldierCount = 0;
-        farmCount = 0;
-        mineCount = 0;
-        houseCount = 0;
+        Units = new List<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -36,37 +28,46 @@ public class PlayerController : MonoBehaviour
     {
 	    if(hasTurn)
         {
-            resources.updateResources();
+            resources.updateResourcesOnGUI();
         }
 	}
 
-    public bool buyUnit(string unit, GameObject selectedGameTile)
+    public bool buyUnit(string unit, GameObject selectedGameTile, int playerTurn)
     {
+        Rigidbody newUnit;
+
         //Debug.Log("buying");
         if (unit == "Soldier")
         {
             //Debug.Log("Soldier");
-            //Soldier cost: 50 food, 0 gold, 1 unit (1)
-            if(resources.subtractUnitCost(50, 0, 1))
+            if(resources.subtractUnitCost(GameSettings.Values.soldierFoodCost, GameSettings.Values.soldierGoldCost, GameSettings.Values.soldierUnitCost))
             {
                 //Debug.Log("start placing");
-                Units.Add((GameObject)Instantiate(Soldier, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion()));
-                SoldierCount++;
-                selectedGameTile.GetComponent<TileManager>().setOccupied(1);
-                //Debug.Log("Done");
+                newUnit = (Rigidbody)Instantiate(Soldier, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion());
+                selectedGameTile.GetComponent<TileManager>().setOccupied(true);
+
+                //Soldier set up: 100 health, 4 walk range, 1 attack range, 50 attack damage
+                newUnit.GetComponent<UnitController>().setupUnit(GameSettings.Values.soldierHealth, GameSettings.Values.soldierMovementRange,
+                    GameSettings.Values.soldierAttackRange, GameSettings.Values.soldierAttackDamage, playerTurn);
+
+                Units.Add(newUnit);
+                Debug.Log("Done");
                 return true;
             }
         }
         else if (unit == "Farm")
         {
             //Debug.Log("Farm");
-            //Farm cost: 0 Food, 100 Gold, 1 Unit (2)
-            if (resources.subtractUnitCost(0, 100, 1))
+            if (resources.subtractUnitCost(0, 100, 2))
             {
                 //Debug.Log("start placing")
-                Units.Add((GameObject)Instantiate(Farm, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion()));
-                farmCount++;
-                selectedGameTile.GetComponent<TileManager>().setOccupied(2);
+                newUnit = (Rigidbody)Instantiate(Farm, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion());
+                selectedGameTile.GetComponent<TileManager>().setOccupied(true);
+
+                //Farm set up: 500 health, 0 walk range, 0 attack range, 0 attack damage
+                newUnit.GetComponent<UnitController>().setupUnit(500, 0, 0, 0, playerTurn);
+
+                Units.Add(newUnit);           
                 //Debug.Log("Done");
                 return true;
             }
@@ -78,9 +79,29 @@ public class PlayerController : MonoBehaviour
 
     public void giveTurn()
     {
-        //Debug.Log("New turn: " + resources.getFoodCount() + ", " + resources.getGoldCount() + ", " + resources.getUnitCount());
         hasTurn = true;
-        resources.processIncome(farmCount, mineCount);
+
+        int farmCount = 0;
+        int mineCount = 0;
+        int houseCount = 0;
+
+        foreach (Rigidbody unit in Units)
+        {
+            if (unit == Farm)
+            {
+                farmCount++;
+            }
+            else if (unit == Mine)
+            {
+                mineCount++;
+            }
+            else if (unit == House)
+            {
+                houseCount++;
+            }
+        }
+
+        resources.processIncome(farmCount, mineCount, houseCount);
     }
 
     public void endTurn()
@@ -91,9 +112,9 @@ public class PlayerController : MonoBehaviour
 
     public void deselectAll()
     {
-        foreach (GameObject o in Units)
+        foreach (Rigidbody r in Units)
         {
-            o.GetComponent<UnitController>().deselectUnit();
+            r.GetComponent<UnitController>().deselectUnit();
         }
     }
 }

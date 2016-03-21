@@ -5,10 +5,10 @@ public class UnitController : MonoBehaviour {
 
     private int player;
 
-    private int health;
-    private int movement;
-    private int range;
-    private int damage;
+    private int unitHealth;
+    private int movementRange;
+    private int attackRange;
+    private int attackDamage;
 
     private bool selected;
 
@@ -16,19 +16,19 @@ public class UnitController : MonoBehaviour {
 	void Start ()
     {
         player = 0;
-
-        health = 100;
-        movement = 0;
-        range = 0;
-        damage = 0;
+        unitHealth = 1;
+        movementRange = 0;
+        attackRange = 0;
+        attackDamage = 0;
 	}
 
-    public void setupUnit(int h, int m, int r, int d)
+    public void setupUnit(int health, int movement, int range, int damage, int p)
     {
-        health = h;
-        movement = m;
-        range = r;
-        damage = d;
+        unitHealth = health;
+        movementRange = movement;
+        attackRange = range;
+        attackDamage = damage;
+        player = p;
     }
 	
 	// Update is called once per frame
@@ -36,7 +36,15 @@ public class UnitController : MonoBehaviour {
     {
         if (selected)
         {
-
+            Renderer rend = GetComponent<Renderer>();
+            rend.material.shader = Shader.Find("Specular");
+            rend.material.SetColor("_Color", Color.green);
+        }
+        else
+        {
+            Renderer rend = GetComponent<Renderer>();
+            rend.material.shader = Shader.Find("Specular");
+            rend.material.SetColor("_Color", Color.white);
         }
 	}
 
@@ -60,8 +68,33 @@ public class UnitController : MonoBehaviour {
         player = p;
     }
 
-    public int belongsToPlayer()
+    public bool belongsToPlayer(int playerTurn)
     {
-        return player;
+        if (playerTurn == player)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public int getUnitHealth()
+    {
+        return unitHealth;
+    }
+
+    public int getMovementRange()
+    {
+        return movementRange;
+    }
+
+    public int getAttackRange()
+    {
+        return attackRange;
+    }
+
+    public int getAttackDamage()
+    {
+        return attackDamage;
     }
 }
