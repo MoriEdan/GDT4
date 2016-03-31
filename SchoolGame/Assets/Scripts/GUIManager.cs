@@ -11,11 +11,29 @@ public class GUIManager : MonoBehaviour
     public Text PlayerTurn;
     public GameObject ResourceContainer;
 
+    public string currentToolTipText;
+    private GUIStyle guiStyleFore;
+    private GUIStyle guiStyleBack;
+
     // Use this for initialization
     void Start ()
     {
         instance = this;
         UnitButtons.SetActive(false);
+
+        currentToolTipText = "";
+
+        guiStyleFore = new GUIStyle();
+        guiStyleFore.normal.textColor = Color.magenta;
+        guiStyleFore.fontSize = 20;
+        guiStyleFore.alignment = TextAnchor.UpperLeft;
+        guiStyleFore.wordWrap = true;
+
+        guiStyleBack = new GUIStyle();
+        guiStyleBack.normal.textColor = Color.black;
+        guiStyleBack.fontSize = 20;
+        guiStyleBack.alignment = TextAnchor.UpperLeft;
+        guiStyleBack.wordWrap = true;
     }
 
     public void showUnitButtons(bool active)
@@ -48,13 +66,19 @@ public class GUIManager : MonoBehaviour
         MainGame.instance.buyUnitFromButton(unit);
     }
 
-    public void unitMoveButton()
+    public void unitCancelButton()
     {
-        //MainGame.instance.moveUnit();
+        MainGame.instance.cancelUnitFromButton();
     }
 
-    public void unitAttackButton()
+    public void OnGUI()
     {
-
+        if (currentToolTipText != "")
+        {
+            var x = Event.current.mousePosition.x;
+            var y = Event.current.mousePosition.y;
+            GUI.Label(new Rect(x - 9, y + 20, 300, 60), currentToolTipText, guiStyleBack);
+            GUI.Label(new Rect(x - 10, y + 20, 300, 60), currentToolTipText, guiStyleFore);
+        }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameField : MonoBehaviour
 {
+    public static GameField instance;
+
     public GameObject GameTile;
 
     private GameObject[,] GameGrid;
@@ -11,6 +13,8 @@ public class GameField : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        instance = this;
+
         Debug.Log("start");
         int gridSizeX = GameSettings.Values.gridSizeX;
         int gridSizeZ = GameSettings.Values.gridSizeZ;
@@ -62,6 +66,8 @@ public class GameField : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        selectedGameTile = null;
+
         for (int x = 0; x < GameSettings.Values.gridSizeX; x++)
         {
             for (int z = 0; z < GameSettings.Values.gridSizeZ; z++)
@@ -74,19 +80,54 @@ public class GameField : MonoBehaviour
         }
     }
 
+    public void resetOccupiedUnderUnit(Rigidbody unit)
+    {
+        int gridSizeX = GameSettings.Values.gridSizeX;
+        int gridSizeZ = GameSettings.Values.gridSizeZ;
+
+        int gameGridX = ((gridSizeX - 1) + (int)unit.position.x) / 2;
+        int gameGridZ = ((gridSizeZ - 1) + (int)unit.position.z) / 2;
+
+        GameGrid[gameGridX, gameGridZ].GetComponent<TileManager>().setOccupied(false);
+
+        Debug.Log(gameGridX + ", " + gameGridZ);
+    }
+
     public GameObject getSelectedGameTile()
     {
         return selectedGameTile;
     }
-   
 
-    public void deselectAll()
+    public void unSetAllMovable()
     {
         for (int x = 0; x < GameSettings.Values.gridSizeX; x++)
         {
             for (int z = 0; z < GameSettings.Values.gridSizeZ; z++)
             {
-                GameGrid[x, z].GetComponent<TileManager>().deselectTile();
+                GameGrid[x, z].GetComponent<TileManager>().setMoveTo(false);
+            }
+        }
+    }
+
+    public void unsetAllAttackable()
+    {
+        for (int x = 0; x < GameSettings.Values.gridSizeX; x++)
+        {
+            for (int z = 0; z < GameSettings.Values.gridSizeZ; z++)
+            {
+                GameGrid[x, z].GetComponent<TileManager>().setCanAttack(false);
+            }
+        }
+    }
+
+
+    public void deselectAllTiles()
+    {
+        for (int x = 0; x < GameSettings.Values.gridSizeX; x++)
+        {
+            for (int z = 0; z < GameSettings.Values.gridSizeZ; z++)
+            {
+                GameGrid[x, z].GetComponent<TileManager>().setSelected(false);
                 selectedGameTile = null;
             }
         }

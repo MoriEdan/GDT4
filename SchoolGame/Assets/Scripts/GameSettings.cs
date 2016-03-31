@@ -33,8 +33,35 @@ public class GameSettings : MonoBehaviour {
     public int soldierAttackRange;
     public int soldierAttackDamage;
 
-	// Use this for initialization
-	void Start ()
+    //farm values
+    public int farmFoodCost;
+    public int farmGoldCost;
+    public int farmUnitCost;
+    public int farmHealth;
+    public int farmMovementRange;
+    public int farmAttackRange;
+    public int farmAttackDamage;
+
+    //mine values
+    public int mineFoodCost;
+    public int mineGoldCost;
+    public int mineUnitCost;
+    public int mineHealth;
+    public int mineMovementRange;
+    public int mineAttackRange;
+    public int mineAttackDamage;
+
+    //house values
+    public int houseFoodCost;
+    public int houseGoldCost;
+    public int houseUnitCost;
+    public int houseHealth;
+    public int houseMovementRange;
+    public int houseAttackRange;
+    public int houseAttackDamage;
+
+    // Use this for initialization
+    void Awake ()
     {
         Values = this;
 	}

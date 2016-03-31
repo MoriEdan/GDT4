@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private List<Rigidbody> Units;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
     {
         hasTurn = false;
         resources = GetComponent<ResourceManager>();
@@ -36,45 +36,85 @@ public class PlayerController : MonoBehaviour
     {
         Rigidbody newUnit;
 
-        //Debug.Log("buying");
+        Debug.Log("buying");
         if (unit == "Soldier")
         {
-            //Debug.Log("Soldier");
+            Debug.Log("Soldier");
             if(resources.subtractUnitCost(GameSettings.Values.soldierFoodCost, GameSettings.Values.soldierGoldCost, GameSettings.Values.soldierUnitCost))
             {
                 //Debug.Log("start placing");
                 newUnit = (Rigidbody)Instantiate(Soldier, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion());
                 selectedGameTile.GetComponent<TileManager>().setOccupied(true);
 
-                //Soldier set up: 100 health, 4 walk range, 1 attack range, 50 attack damage
+                //Soldier set up
                 newUnit.GetComponent<UnitController>().setupUnit(GameSettings.Values.soldierHealth, GameSettings.Values.soldierMovementRange,
                     GameSettings.Values.soldierAttackRange, GameSettings.Values.soldierAttackDamage, playerTurn);
 
-                Units.Add(newUnit);
-                Debug.Log("Done");
+                processNewUnit(newUnit);
                 return true;
             }
         }
         else if (unit == "Farm")
         {
             //Debug.Log("Farm");
-            if (resources.subtractUnitCost(0, 100, 2))
+            if (resources.subtractUnitCost(GameSettings.Values.farmFoodCost, GameSettings.Values.farmGoldCost, GameSettings.Values.farmUnitCost))
             {
                 //Debug.Log("start placing")
                 newUnit = (Rigidbody)Instantiate(Farm, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion());
                 selectedGameTile.GetComponent<TileManager>().setOccupied(true);
 
-                //Farm set up: 500 health, 0 walk range, 0 attack range, 0 attack damage
-                newUnit.GetComponent<UnitController>().setupUnit(500, 0, 0, 0, playerTurn);
+                //Farm set up
+                newUnit.GetComponent<UnitController>().setupUnit(GameSettings.Values.farmHealth, GameSettings.Values.farmMovementRange,
+                    GameSettings.Values.farmAttackRange, GameSettings.Values.farmAttackDamage, playerTurn);
 
-                Units.Add(newUnit);           
-                //Debug.Log("Done");
+                processNewUnit(newUnit);
+                return true;
+            }
+        }
+        else if (unit == "Mine")
+        {
+            //Debug.Log("mine");
+            if (resources.subtractUnitCost(GameSettings.Values.mineFoodCost, GameSettings.Values.mineGoldCost, GameSettings.Values.mineUnitCost))
+            {
+                //Debug.Log("start placing")
+                newUnit = (Rigidbody)Instantiate(Mine, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion());
+                selectedGameTile.GetComponent<TileManager>().setOccupied(true);
+
+                //mine set up
+                newUnit.GetComponent<UnitController>().setupUnit(GameSettings.Values.mineHealth, GameSettings.Values.mineMovementRange,
+                    GameSettings.Values.mineAttackRange, GameSettings.Values.mineAttackDamage, playerTurn);
+
+                processNewUnit(newUnit);
+                return true;
+            }
+        }
+        else if (unit == "House")
+        {
+            Debug.Log("house");
+            if (resources.subtractUnitCost(GameSettings.Values.houseFoodCost, GameSettings.Values.houseGoldCost, GameSettings.Values.houseUnitCost))
+            {
+                Debug.Log("start placing");
+                newUnit = (Rigidbody)Instantiate(House, selectedGameTile.transform.position + new Vector3(0, 1f, 0), new Quaternion());
+                selectedGameTile.GetComponent<TileManager>().setOccupied(true);
+
+                //house set up
+                newUnit.GetComponent<UnitController>().setupUnit(GameSettings.Values.houseHealth, GameSettings.Values.houseMovementRange,
+                    GameSettings.Values.houseAttackRange, GameSettings.Values.houseAttackDamage, playerTurn);
+
+                processNewUnit(newUnit);
                 return true;
             }
         }
         //add more units
 
         return false;
+    }
+
+    private void processNewUnit(Rigidbody newUnit)
+    {
+        newUnit.transform.SetParent(this.transform);
+        Units.Add(newUnit);
+        Debug.Log(newUnit.GetComponent<UnitController>().ToString());
     }
 
     public void giveTurn()
@@ -87,15 +127,18 @@ public class PlayerController : MonoBehaviour
 
         foreach (Rigidbody unit in Units)
         {
-            if (unit == Farm)
+            Debug.Log(unit);
+            Debug.Log(Farm);
+
+            if (unit.name == Farm.name + "(Clone)")
             {
                 farmCount++;
             }
-            else if (unit == Mine)
+            else if (unit.name == Mine.name + "(Clone)")
             {
                 mineCount++;
             }
-            else if (unit == House)
+            else if (unit.name == House.name + "(Clone)")
             {
                 houseCount++;
             }
@@ -106,15 +149,60 @@ public class PlayerController : MonoBehaviour
 
     public void endTurn()
     {
-        //bla bla end turn
+        foreach (Rigidbody unit in Units)
+        {
+            unit.GetComponent<UnitController>().setHasMoved(false);
+            unit.GetComponent<UnitController>().setHasAttacked(false);
+        }
         hasTurn = false;
     }
 
-    public void deselectAll()
+    public void deselectAllUnits()
     {
-        foreach (Rigidbody r in Units)
+        foreach (Rigidbody unit in Units)
         {
-            r.GetComponent<UnitController>().deselectUnit();
+            unit.GetComponent<UnitController>().setCanBeAttacked(false);
+            unit.GetComponent<UnitController>().deselectUnit();
+        }
+    }
+
+    public UnitController getSelectedUnitController()
+    {
+        foreach (Rigidbody unit in Units)
+        {
+            if (unit.GetComponent<UnitController>().getSelected())
+            {
+                return unit.GetComponent<UnitController>();
+            }
+        }
+
+        return null;
+    }
+
+    public Rigidbody getSelectedUnit()
+    {
+        foreach (Rigidbody unit in Units)
+        {
+            if (unit.GetComponent<UnitController>().getSelected())
+            {
+                return unit;
+            }
+        }
+
+        return null;
+    }
+
+    public void removeUnit(Rigidbody UnitToRemove)
+    {
+        foreach (Rigidbody unit in Units)
+        {
+            if(unit == UnitToRemove)
+            {
+                GameField.instance.resetOccupiedUnderUnit(UnitToRemove);
+                Units.Remove(UnitToRemove);
+                Destroy(UnitToRemove.gameObject);
+                return;
+            }
         }
     }
 }

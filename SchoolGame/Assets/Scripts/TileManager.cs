@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TileManager : MonoBehaviour {
-
+public class TileManager : MonoBehaviour
+{ 
     private bool selected;
     private bool occupied;
+    private bool canMoveTo;
+    private bool canAttack;
     private bool[] usableByPlayer = new bool[] { false, false, false, false };
 
     // Use this for initialization
@@ -12,44 +14,51 @@ public class TileManager : MonoBehaviour {
     {
         occupied = false;
         selected = false;
+        canMoveTo = false;
+        canAttack = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        Renderer rend = GetComponent<Renderer>();
+        rend.material.shader = Shader.Find("Specular");
+        rend.material.SetColor("_Color", Color.white);
+
         if (selected)
         {
-            Renderer rend = GetComponent<Renderer>();
-            rend.material.shader = Shader.Find("Specular");
-            rend.material.SetColor("_Color", Color.green);
+            rend.material.SetColor("_Color", Color.cyan);
+        }
+        else if (canAttack)
+        {
+            rend.material.SetColor("_Color", Color.red);
+        }
+        else if (canMoveTo)
+        {
+            rend.material.SetColor("_Color", Color.gray);
         }
         else if (!selected && usableByPlayer[0] || usableByPlayer[1] || usableByPlayer[2] || usableByPlayer[3])
         {
-            Renderer rend = GetComponent<Renderer>();
-            rend.material.shader = Shader.Find("Specular");
-
-            if (usableByPlayer[0])
+            if (usableByPlayer[0] && MainGame.instance.getCurrentTurnForArray() == 0)
             {
-                rend.material.SetColor("_Color", Color.blue);
+                rend.material.SetColor("_Color", Color.green);
             }
-            else if(usableByPlayer[1])
+            else if(usableByPlayer[1] && MainGame.instance.getCurrentTurnForArray() == 1)
             {
-                rend.material.SetColor("_Color", Color.yellow);
+                rend.material.SetColor("_Color", Color.green);
             }
-            else if(usableByPlayer[2])
+            else if(usableByPlayer[2] && MainGame.instance.getCurrentTurnForArray() == 2)
             {
-                rend.material.SetColor("_Color", Color.magenta);
+                rend.material.SetColor("_Color", Color.green);
             }
-            else if(usableByPlayer[3])
+            else if(usableByPlayer[3] && MainGame.instance.getCurrentTurnForArray() == 3)
             {
-                rend.material.SetColor("_Color", Color.red);
+                rend.material.SetColor("_Color", Color.green);
+            }
+            else
+            {
+                rend.material.SetColor("_Color", Color.white);
             }            
-        }
-        else
-        {
-            Renderer rend = GetComponent<Renderer>();
-            rend.material.shader = Shader.Find("Specular");
-            rend.material.SetColor("_Color", Color.white);
         }
     }
 
@@ -68,14 +77,33 @@ public class TileManager : MonoBehaviour {
         return selected;
     }
 
-    public void selectTile()
+    public void setSelected(bool select)
     {
-        selected = true;
+        selected = select;
     }
 
-    public void deselectTile()
+    public bool getCanMoveTo()
     {
-        selected = false;
+        if (canMoveTo && !occupied)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void setMoveTo(bool move)
+    {
+        canMoveTo = move;
+    }
+
+    public bool getCanAttack()
+    {
+        return canAttack;
+    }
+
+    public void setCanAttack(bool attack)
+    {
+        canAttack = attack;
     }
 
     public bool getUsabiltyForPlayer(int player)

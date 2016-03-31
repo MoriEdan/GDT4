@@ -34,6 +34,15 @@ public class CameraControl : MonoBehaviour {
             transform.position += new Vector3(speed * Time.deltaTime, 0, 0);
         }
 
+        if (Input.GetAxis("Mouse ScrollWheel") > 0) // forward
+        {
+            transform.position -= new Vector3(0, speed * Time.deltaTime, 0);
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") < 0) // back
+        {
+            transform.position += new Vector3(0, speed * Time.deltaTime, 0);
+        }
+
         GameLight.transform.position = this.transform.position;
     }
 

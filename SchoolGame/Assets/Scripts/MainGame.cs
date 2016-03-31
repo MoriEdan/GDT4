@@ -8,7 +8,7 @@ public class MainGame : MonoBehaviour
     public static MainGame instance;
 
     public GameObject PlayerContainer;
-    public GameField GameField;
+    public GameObject Player;
 
     private List<GameObject> Players;
     private int turn;
@@ -21,10 +21,13 @@ public class MainGame : MonoBehaviour
         Players = new List<GameObject>();
 
         //Add players to the list of available players
-        for (int i = 0; i < PlayerContainer.transform.childCount; i++)
+        for (int i = 0; i < GameSettings.Values.numberOfPlayers; i++)
         {
             Debug.Log(i);
-            Players.Add(PlayerContainer.transform.GetChild(i).gameObject);
+            GameObject newPlayer = (GameObject)Instantiate(Player, new Vector3(0, 0, 0), new Quaternion());
+            newPlayer.transform.SetParent(PlayerContainer.transform);
+            newPlayer.name = "Player " + (i + 1).ToString();
+            Players.Add(newPlayer);
         }
 
         //Make a random player start the game
@@ -32,59 +35,111 @@ public class MainGame : MonoBehaviour
         CameraControl.instance.setCameraPositionForPlayer(turn);
         getPlayerControlerCurrentTurn().giveTurn();  
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         GUIManager.instance.setPlayerTurnGUI(turn);
 
         if (Input.GetMouseButtonDown(0))
         {
-            //prevent raycast from going through buttons
-            if(!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    //Debug.Log("You selected the " + hit.transform.name); // ensure you picked right object
+                    Debug.Log("You selected the " + hit.transform.name); // ensure you picked right object
 
                     if (hit.transform.tag == "GameTile")
                     {
-                        deselectAllItems();
-                        hit.collider.gameObject.GetComponent<TileManager>().selectTile();
-                        GUIManager.instance.showUnitButtons(false);
-                    }
-                    else if(hit.transform.tag == "Unit")
-                    {
-                        deselectAllItems();
-                        hit.collider.gameObject.GetComponent<UnitController>().selectUnit();
+                        GameObject selectedTile = GameField.instance.getSelectedGameTile();
+                        Rigidbody selectedUnit = getPlayerControlerCurrentTurn().getSelectedUnit();
 
-                        if (hit.collider.gameObject.GetComponent<UnitController>().belongsToPlayer(turn))
-                        {        
-                            GUIManager.instance.showUnitButtons(true);
-                        }  
+                        //select new tile
+                        if (selectedTile == null && selectedUnit == null)
+                        {
+                            GUIManager.instance.showUnitButtons(false);
+                            hit.collider.gameObject.GetComponent<TileManager>().setSelected(true);
+                        }
+                        //move unit
+                        else if (selectedTile == null && selectedUnit != null)
+                        {
+                            if (hit.collider.gameObject.GetComponent<TileManager>().getCanMoveTo()
+                                    && !selectedUnit.GetComponent<UnitController>().getHasMoved())
+                            {
+                                GameField.instance.resetOccupiedUnderUnit(selectedUnit);
+                                selectedUnit.GetComponent<UnitController>().moveUnit(selectedUnit, hit.collider.gameObject);
+                                removeUnitHighlights();
+                            }
+                        }
+                        //select new tile
+                        else if (selectedTile != null && selectedUnit == null)
+                        {
+                            GameField.instance.deselectAllTiles();
+                            GUIManager.instance.showUnitButtons(false);
+                            hit.collider.gameObject.GetComponent<TileManager>().setSelected(true);
+                        }
+                        else if (selectedTile != null && selectedUnit != null)
+                        {
+                            Debug.Log("this shouldnt happen");
+                        }
+                    }
+                    else if (hit.transform.tag == "Unit")
+                    {
+                        Rigidbody selectedUnit = getPlayerControlerCurrentTurn().getSelectedUnit();
+
+                        if (selectedUnit == null)
+                        {
+                            if (hit.collider.gameObject.GetComponent<UnitController>().belongsToPlayer(turn))
+                            {
+                                GameField.instance.deselectAllTiles();
+                                hit.collider.gameObject.GetComponent<UnitController>().selectUnit();
+                                GUIManager.instance.showUnitButtons(true);
+                                Debug.Log(hit.collider.gameObject.GetComponent<UnitController>().ToString());
+                            }
+                        }
+                        else if (selectedUnit != null)
+                        {
+                            Debug.Log(selectedUnit);
+                            Debug.Log(hit.collider.gameObject.GetComponent<Rigidbody>());
+
+                            if (selectedUnit != hit.collider.gameObject.GetComponent<Rigidbody>() && hit.collider.gameObject.GetComponent<UnitController>().getCanBeAttacked()
+                                && !selectedUnit.GetComponent<UnitController>().getHasAttacked())
+                            {
+                                removeAllHighlights();
+                                selectedUnit.GetComponent<UnitController>().attackWithUnit(hit.collider.gameObject.GetComponent<Rigidbody>());            
+                            }
+                        }
                     }
                 }
-            }     
+            }
         }
+    }
+
+    //deselectUnit and remove movement mark and hide buttons
+    public void cancelUnitFromButton()
+    {
+        removeUnitHighlights();
+        foreach (GameObject player in Players)
+        {
+            player.GetComponent<PlayerController>().deselectAllUnits();
+        }
+        GUIManager.instance.showUnitButtons(false);
     }
 
     //handling buttons for buying units
     public void buyUnitFromButton(string unit)
     {
-        GameObject selectedGameTile = GameField.getSelectedGameTile();
-        //Debug.Log(selectedGameTile);
+        GameObject selectedGameTile = GameField.instance.getSelectedGameTile();
         if (selectedGameTile != null)
         {
-            //Debug.Log(selectedGameTile.GetComponent<TileManager>().getOccupied());
-            //Debug.Log(selectedGameTile.GetComponent<TileManager>().getUsabiltyForPlayer(turn));
             if (!selectedGameTile.GetComponent<TileManager>().getOccupied()
                 && selectedGameTile.GetComponent<TileManager>().getUsabiltyForPlayer(turn))
             { 
-                if (getPlayerControlerCurrentTurn().buyUnit(unit, selectedGameTile, turn))
+                if (!getPlayerControlerCurrentTurn().buyUnit(unit, selectedGameTile, turn))
                 {
-                    //nextTurn();
+                    Debug.Log("buying unit failed");
                 }
             }
         }
@@ -92,7 +147,7 @@ public class MainGame : MonoBehaviour
 
     public void nextTurn()
     {
-        GameField.deselectAll();
+        removeAllHighlights();
 
         getPlayerControlerCurrentTurn().endTurn();
         turn++;
@@ -104,17 +159,29 @@ public class MainGame : MonoBehaviour
         getPlayerControlerCurrentTurn().giveTurn();
     }
 
-    private PlayerController getPlayerControlerCurrentTurn()
+    public int getCurrentTurnForArray()
     {
-        return Players[turn - 1].GetComponent<PlayerController>();
+        return turn - 1;
     }
 
-    private void deselectAllItems()
+    public PlayerController getPlayerControlerCurrentTurn()
     {
-        GameField.deselectAll();
-        foreach (GameObject o in Players)
+        return Players[getCurrentTurnForArray()].GetComponent<PlayerController>();
+    }
+
+    private void removeUnitHighlights()
+    {
+        GameField.instance.unSetAllMovable();
+        GameField.instance.unsetAllAttackable();
+    }
+
+    private void removeAllHighlights()
+    {
+        removeUnitHighlights();
+        GameField.instance.deselectAllTiles();
+        foreach (GameObject player in Players)
         {
-            o.GetComponent<PlayerController>().deselectAll();
+            player.GetComponent<PlayerController>().deselectAllUnits();
         }
     }
 }
