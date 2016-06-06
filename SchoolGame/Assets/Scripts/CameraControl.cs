@@ -51,19 +51,24 @@ public class CameraControl : MonoBehaviour {
         switch (player)
         {
             case 1: //camera position player 1
-                CameraControl.instance.transform.position = new Vector3(-21, 5, -15);
+                this.transform.position = new Vector3(-21, 5, -15);
                 break;
             case 2: //camera position player 2
-                CameraControl.instance.transform.position = new Vector3(8, 5, -15);
+                this.transform.position = new Vector3(8, 5, -15);
                 break;
             case 3: //camera position player 3
-                CameraControl.instance.transform.position = new Vector3(-21, 5, 15);
+                this.transform.position = new Vector3(-21, 5, 15);
                 break;
             case 4: //camera position player 4
-                CameraControl.instance.transform.position = new Vector3(8, 5, 15);
+                this.transform.position = new Vector3(8, 5, 15);
                 break;
             default:
                 break;
         }
+    }
+
+    public void setCameraPositionForGameOver()
+    {
+        this.transform.position = new Vector3(0, 0, 0); //TO DO
     }
 }

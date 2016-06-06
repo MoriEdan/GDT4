@@ -35,6 +35,11 @@ public class ResourceManager : MonoBehaviour
         return unitCount;
     }
 
+    public void refundUnitCostOnDeath(int unitCountToRefund)
+    {
+        unitCount -= unitCountToRefund;
+    }
+
     public bool subtractUnitCost(int foodCost, int goldCost, int unitCost)
     {
         if (foodCost <= foodCount && goldCost <= goldCount && unitCount + unitCost <= unitCap)
@@ -48,12 +53,38 @@ public class ResourceManager : MonoBehaviour
         return false;
     }
 
-    public void processIncome(int numOfFarms, int numOfMines, int houseCount)
+    public void processIncome(int numOfFarms, int numOfMines, List<GameObject> Units)
     {
         //always get 10 food to keep the game going
         foodCount += 10 + (GameSettings.Values.FoodPerFarm * numOfFarms);
         goldCount += (GameSettings.Values.GoldPerMine * numOfMines);
-        unitCap = GameSettings.Values.startUnitCap + GameSettings.Values.UnitsPerHouse * houseCount;
+
+        recalculateUnitCountAndCap(Units);
+        
+    }
+
+    public void recalculateUnitCountAndCap(List<GameObject> Units)
+    {
+        unitCount = 0;
+        unitCap = GameSettings.Values.startUnitCap;
+        foreach (GameObject unit in Units)
+        {
+            switch(unit.name)
+            {
+                case "Soldier(Clone)":
+                    unitCount += GameSettings.Values.soldierUnitCost;
+                    break;
+                case "Farm(Clone)":
+                    unitCount += GameSettings.Values.farmUnitCost;
+                    break;
+                case "Mine(Clone)":
+                    unitCount += GameSettings.Values.mineUnitCost;
+                    break;
+                case "House(Clone)":
+                    unitCap += GameSettings.Values.UnitsPerHouse;
+                    break;
+            }
+        }
     }
 
     public void updateResourcesOnGUI()

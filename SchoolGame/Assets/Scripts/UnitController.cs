@@ -188,11 +188,11 @@ public class UnitController : MonoBehaviour {
 
         if(unitHealth <= 0)
         {
-            GetComponentInParent<PlayerController>().removeUnit(this.GetComponentInParent<Rigidbody>());
+            GetComponentInParent<PlayerController>().removeUnit(this.gameObject);
         }
     }
 
-    public void moveUnit(Rigidbody unit, GameObject tile)
+    public void moveUnit(GameObject unit, GameObject tile)
     {
         if (tile != null)
         {
@@ -203,7 +203,7 @@ public class UnitController : MonoBehaviour {
                 GameField.instance.resetOccupiedUnderUnit(unit);
 
                 newTile.setOccupied(true);
-                unit.position = tile.transform.position + new Vector3(0, 1f, 0);
+                unit.transform.position = tile.transform.position + new Vector3(0, 1f, 0);
                 unit.GetComponent<UnitController>().setHasMoved(true);
             }
         }

@@ -1,0 +1,14 @@
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.cube.bigrams
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.cube.fold
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.cube.lm
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.cube.nn
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.cube.params
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.cube.size
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.cube.word-freq
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.tesseract_cube.nn
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\tessdata\eng.traineddata
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Example.OCR.exe
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Example.OCR.pdb
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\OCR\obj\Debug\OCR.csprojResolveAssemblyReference.cache
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\OCR\obj\Debug\Example.OCR.exe
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\OCR\obj\Debug\Example.OCR.pdb

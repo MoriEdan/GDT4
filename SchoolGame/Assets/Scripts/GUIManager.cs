@@ -10,6 +10,7 @@ public class GUIManager : MonoBehaviour
     public GameObject UnitButtons;
     public Text PlayerTurn;
     public GameObject ResourceContainer;
+    public Text WinText;
 
     public string currentToolTipText;
     private GUIStyle guiStyleFore;
@@ -21,6 +22,7 @@ public class GUIManager : MonoBehaviour
         instance = this;
         UnitButtons.SetActive(false);
 
+        WinText.text = "";
         currentToolTipText = "";
 
         guiStyleFore = new GUIStyle();
@@ -44,6 +46,11 @@ public class GUIManager : MonoBehaviour
 	public void setPlayerTurnGUI(int turn)
     {
         PlayerTurn.text = "Player " + turn + " Turn!";
+    }
+
+    public void displayPlayerWin(int turn)
+    {
+        WinText.text = "PLAYER " + turn + "WINS!";
     }
 
     public void updateResourcesGUI(int foodCount, int goldCount, int unitCount, int unitCap)

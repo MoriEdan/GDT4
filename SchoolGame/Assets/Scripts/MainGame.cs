@@ -12,12 +12,12 @@ public class MainGame : MonoBehaviour
 
     private List<GameObject> Players;
     private int turn;
+    
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         instance = this;
-
         Players = new List<GameObject>();
 
         //Add players to the list of available players
@@ -54,7 +54,7 @@ public class MainGame : MonoBehaviour
                     if (hit.transform.tag == "GameTile")
                     {
                         GameObject selectedTile = GameField.instance.getSelectedGameTile();
-                        Rigidbody selectedUnit = getPlayerControlerCurrentTurn().getSelectedUnit();
+                        GameObject selectedUnit = getPlayerControlerCurrentTurn().getSelectedUnit();
 
                         //select new tile
                         if (selectedTile == null && selectedUnit == null)
@@ -87,7 +87,7 @@ public class MainGame : MonoBehaviour
                     }
                     else if (hit.transform.tag == "Unit")
                     {
-                        Rigidbody selectedUnit = getPlayerControlerCurrentTurn().getSelectedUnit();
+                        GameObject selectedUnit = getPlayerControlerCurrentTurn().getSelectedUnit();
 
                         if (selectedUnit == null)
                         {
@@ -149,14 +149,40 @@ public class MainGame : MonoBehaviour
     {
         removeAllHighlights();
 
+        //Increment turn
         getPlayerControlerCurrentTurn().endTurn();
-        turn++;
-        if (turn > GameSettings.Values.numberOfPlayers)
+
+        bool foundActivePlayer = false;
+        int numberOfPlayersStillPlaying = GameSettings.Values.numberOfPlayers;
+
+        while (!foundActivePlayer)
         {
-            turn = 1;
+            turn++;
+            if(turn > GameSettings.Values.numberOfPlayers)
+            {
+                turn = 1;
+            }
+
+            if (!getPlayerControlerCurrentTurn().checkLost())
+            {
+                foundActivePlayer = true;
+            }
+            else
+            {
+                numberOfPlayersStillPlaying--;
+            }
         }
-        CameraControl.instance.setCameraPositionForPlayer(turn);
-        getPlayerControlerCurrentTurn().giveTurn();
+
+        if(numberOfPlayersStillPlaying == 1)
+        {
+            GUIManager.instance.displayPlayerWin(turn);
+        }
+        else
+        {
+            //methodes to set the new turn
+            CameraControl.instance.setCameraPositionForPlayer(turn);
+            getPlayerControlerCurrentTurn().giveTurn();
+        } 
     }
 
     public int getCurrentTurnForArray()

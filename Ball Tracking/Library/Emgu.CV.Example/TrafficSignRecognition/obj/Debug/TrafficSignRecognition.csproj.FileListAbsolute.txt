@@ -1,0 +1,9 @@
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\stop-sign-model.png
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\stop-sign.jpg
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Example.TrafficSignRecognition.exe
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Example.TrafficSignRecognition.pdb
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\TrafficSignRecognition\obj\Debug\TrafficSignRecognition.TrafficSignRecognitionForm.resources
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\TrafficSignRecognition\obj\Debug\TrafficSignRecognition.csproj.GenerateResource.Cache
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\TrafficSignRecognition\obj\Debug\Example.TrafficSignRecognition.exe
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\TrafficSignRecognition\obj\Debug\Example.TrafficSignRecognition.pdb
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\TrafficSignRecognition\obj\Debug\TrafficSignRecognition.csprojResolveAssemblyReference.cache

@@ -1,0 +1,5 @@
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Emgu.CV.World.XML
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Emgu.CV.World.dll
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Emgu.CV.World.pdb
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.World\obj\Debug\Emgu.CV.World.dll
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.World\obj\Debug\Emgu.CV.World.pdb

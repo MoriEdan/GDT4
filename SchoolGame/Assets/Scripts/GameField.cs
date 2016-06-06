@@ -80,13 +80,13 @@ public class GameField : MonoBehaviour
         }
     }
 
-    public void resetOccupiedUnderUnit(Rigidbody unit)
+    public void resetOccupiedUnderUnit(GameObject unit)
     {
         int gridSizeX = GameSettings.Values.gridSizeX;
         int gridSizeZ = GameSettings.Values.gridSizeZ;
 
-        int gameGridX = ((gridSizeX - 1) + (int)unit.position.x) / 2;
-        int gameGridZ = ((gridSizeZ - 1) + (int)unit.position.z) / 2;
+        int gameGridX = ((gridSizeX - 1) + (int)unit.transform.position.x) / 2;
+        int gameGridZ = ((gridSizeZ - 1) + (int)unit.transform.position.z) / 2;
 
         GameGrid[gameGridX, gameGridZ].GetComponent<TileManager>().setOccupied(false);
 

@@ -1,0 +1,11 @@
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\haarcascade_frontalface_default.xml
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\lena.jpg
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Example.FaceDetectionVB.exe
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Example.FaceDetectionVB.pdb
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Example.FaceDetectionVB.xml
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\FaceDetectionVB\obj\Debug\FaceDetectionVB.vbprojResolveAssemblyReference.cache
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\FaceDetectionVB\obj\Debug\FaceDetectionVB.Resources.resources
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\FaceDetectionVB\obj\Debug\FaceDetectionVB.vbproj.GenerateResource.Cache
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\FaceDetectionVB\obj\Debug\Example.FaceDetectionVB.exe
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\FaceDetectionVB\obj\Debug\Example.FaceDetectionVB.xml
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\FaceDetectionVB\obj\Debug\Example.FaceDetectionVB.pdb

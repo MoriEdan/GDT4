@@ -1,0 +1,7 @@
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Stitching.exe
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\bin\Stitching.pdb
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\Stitching\obj\Debug\Stitching.StitchingMainForm.resources
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\Stitching\obj\Debug\Stitching.csproj.GenerateResource.Cache
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\Stitching\obj\Debug\Stitching.exe
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\Stitching\obj\Debug\Stitching.pdb
+C:\Users\Tim\Documents\GitHub\GameJamEmbeddedFitness\emgucv-windesktop 3.1.0.2282\Emgu.CV.Example\Stitching\obj\Debug\Stitching.csprojResolveAssemblyReference.cache
